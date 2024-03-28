@@ -7,7 +7,7 @@ import { createOrder } from "../../services/apiRestaurant";
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str
+    str,
   );
 
 const fakeCart: Cart[] = [
@@ -56,13 +56,13 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
       <Form method="POST">
         <div>
           <label>First Name</label>
-          <input type="text" name="customer" required />
+          <input className="input" type="text" name="customer" required />
         </div>
 
         <div>
           <label>Phone number</label>
           <div>
-            <input type="tel" name="phone" required />
+            <input className="input" type="tel" name="phone" required />
           </div>
           {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
@@ -70,12 +70,13 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
         <div>
           <label>Address</label>
           <div>
-            <input type="text" name="address" required />
+            <input className="input" type="text" name="address" required />
           </div>
         </div>
 
         <div>
           <input
+            className="h-6 w-6 accent-yellow-400 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
             type="checkbox"
             name="priority"
             id="priority"
@@ -88,7 +89,10 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
 
         <div>
-          <button disabled={isSubmitting}>
+          <button
+            className="rounded-full bg-yellow-400 px-4 py-3 font-semibold uppercase tracking-wide text-stone-800 transition-colors duration-300 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-offset-2 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Placing order" : "Order now"}
           </button>
         </div>
@@ -118,9 +122,9 @@ export const action = async ({ request }) => {
     return errors;
   }
 
-  const newOrder = await createOrder(order);
+  // const newOrder = await createOrder(order);
 
-  return redirect(`/order/${newOrder.id}`);
+  // return redirect(`/order/${newOrder.id}`);
 };
 
 export default CreateOrder;
