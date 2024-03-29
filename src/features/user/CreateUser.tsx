@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import Button from "../../ui/Button";
 
 type CreateUserProps = {
   children?: React.ReactNode;
@@ -23,12 +24,12 @@ const CreateUser: React.FC<CreateUserProps> = () => {
         placeholder="Your full name"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="w-72"
+        className="input mb-8 w-72"
       />
 
       {username !== "" && (
         <div>
-          <button>Start ordering</button>
+          <Button type="primary">Start ordering</Button>
         </div>
       )}
     </form>

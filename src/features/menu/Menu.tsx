@@ -19,10 +19,8 @@ const Menu: React.FC<MenuProps> = () => {
   const menu = useLoaderData() as Pizza[];
 
   return (
-    <ul>
-      {menu?.map((pizza: Pizza) => (
-        <MenuItem key={pizza.id} pizza={pizza} />
-      ))}
+    <ul className="divide-y divide-stone-200 px-2">
+      {menu?.map((pizza: Pizza) => <MenuItem key={pizza.id} pizza={pizza} />)}
     </ul>
   );
 };
