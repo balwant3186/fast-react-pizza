@@ -1,6 +1,9 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { useState } from "react";
 import Button from "../../ui/Button";
+import { updateName } from "./userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type CreateUserProps = {
   children?: React.ReactNode;
@@ -9,8 +12,17 @@ type CreateUserProps = {
 const CreateUser: React.FC<CreateUserProps> = () => {
   const [username, setUsername] = useState("");
 
-  function handleSubmit(e) {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
+    if (!username) return;
     e.preventDefault();
+
+    dispatch(updateName(username));
+
+    navigate("/menu");
   }
 
   return (
