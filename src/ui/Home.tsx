@@ -2,13 +2,14 @@ import React from "react";
 import CreateUser from "../features/user/CreateUser";
 import { useSelector } from "react-redux";
 import Button from "./Button";
+import { getUserName } from "../features/user/userSlice";
 
 type HomeProps = {
   children?: React.ReactNode;
 };
 
 const Home: React.FC<HomeProps> = () => {
-  const username = useSelector((store) => store.user.username);
+  const username = useSelector(getUserName);
 
   return (
     <div className="my-10 px-4 text-center text-sm sm:my-16">
