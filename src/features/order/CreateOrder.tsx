@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
-import { useSelector } from "react-redux";
-import { getUserName } from "../user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAddressThunk, getUserData } from "../user/userSlice";
 import { clearCart, getCart, getTotalPrice } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import store from "../../store";
@@ -21,12 +21,19 @@ type CreateOrderProps = {
 };
 
 const CreateOrder: React.FC<CreateOrderProps> = () => {
+  const dispatch = useDispatch();
   const [withPriority, setWithPriority] = useState(1);
 
-  const username = useSelector(getUserName);
   const totalCartPrice = useSelector(getTotalPrice);
 
   const cart = useSelector(getCart);
+  const {
+    address,
+    status,
+    position: { latitude, longitude },
+    username,
+    error: errorAddress,
+  } = useSelector(getUserData);
 
   const navigation = useNavigation();
 
@@ -37,6 +44,13 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
   const totalPrice = totalCartPrice + priorityPrice;
 
   const isSubmitting = navigation.state === "submitting";
+
+  const isLoadingAddress = status === "loading";
+
+  const handleGetPosition = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(fetchAddressThunk());
+  };
 
   if (!cart.length) return <EmptyCart />;
 
@@ -68,7 +82,7 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
           </div>
         </div>
 
-        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">Address</label>
           <div className="grow">
             <input
@@ -76,8 +90,26 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
               type="text"
               name="address"
               required
+              defaultValue={address}
+              disabled={isLoadingAddress}
             />
+            {status === "error" && (
+              <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                {errorAddress}
+              </p>
+            )}
           </div>
+          {!latitude && !longitude && (
+            <span className="absolute right-1 top-[5px]">
+              <Button
+                type="small"
+                disabled={isLoadingAddress}
+                onClick={handleGetPosition}
+              >
+                Get Position
+              </Button>
+            </span>
+          )}
         </div>
 
         <div className="mb-12 flex items-center gap-5">
@@ -95,9 +127,14 @@ const CreateOrder: React.FC<CreateOrderProps> = () => {
         </div>
 
         <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+        <input
+          type="hidden"
+          name="position"
+          value={latitude && longitude ? `${latitude}, ${longitude}` : ""}
+        />
 
         <div>
-          <Button type="primary" disabled={isSubmitting}>
+          <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing order"
               : `Order now ${formatCurrency(totalPrice)}`}

@@ -1,14 +1,16 @@
 // IIDSAT
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
 } from "../../utils/helpers";
 import { Cart } from "../cart/Cart";
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 import OrderItem from "./OrderItem";
+import { Pizza } from "../menu/Menu";
+import UpdateOrder from "./UpdateOrder";
 
 export interface Order {
   id: string;
@@ -40,6 +42,14 @@ const Order: React.FC<OrderProps> = () => {
   } = useLoaderData() as Order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
+  const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state === "idle") {
+      fetcher.load("/menu");
+    }
+  }, []);
+
   return (
     <div className="space-y-8 px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -70,7 +80,15 @@ const Order: React.FC<OrderProps> = () => {
 
       <ul className="divide-y divide-stone-200 border-b border-t">
         {cart.map((item) => (
-          <OrderItem key={item.pizzaId} item={item} />
+          <OrderItem
+            key={item.pizzaId}
+            item={item}
+            isLoadingIngredients={fetcher?.state === "loading"}
+            ingredients={
+              fetcher?.data?.find((el: Pizza) => el.id === item.pizzaId)
+                ?.ingredients
+            }
+          />
         ))}
       </ul>
 
@@ -87,6 +105,7 @@ const Order: React.FC<OrderProps> = () => {
           To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}
         </p>
       </div>
+      {!priority && <UpdateOrder />}
     </div>
   );
 };

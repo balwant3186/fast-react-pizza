@@ -17,7 +17,6 @@ const Error: React.FC<ErrorProps> = () => {
   const navigate = useNavigate();
 
   const error = useRouteError() as ErrorRes;
-  console.log("🚀 ~ error:", error);
 
   return (
     <div>
