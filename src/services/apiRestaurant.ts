@@ -1,3 +1,5 @@
+import { Order } from "../features/order/Order";
+
 const API_URL = "https://react-fast-pizza-api.onrender.com/api";
 
 export async function getMenu() {
@@ -18,7 +20,8 @@ export async function getOrder(id: string) {
   return data;
 }
 
-export async function createOrder(newOrder) {
+export async function createOrder(newOrder: Partial<Order>) {
+  console.log("🚀 ~ createOrder ~ newOrder:", newOrder);
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: "POST",
@@ -36,7 +39,10 @@ export async function createOrder(newOrder) {
   }
 }
 
-export async function updateOrder(id: number, updateObj) {
+export async function updateOrder(
+  id: number,
+  updateObj: { [key: string]: string | number | boolean },
+) {
   try {
     const res = await fetch(`${API_URL}/order/${id}`, {
       method: "PATCH",

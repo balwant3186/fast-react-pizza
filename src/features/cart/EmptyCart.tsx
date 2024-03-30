@@ -1,11 +1,6 @@
-import React from "react";
 import LinkButton from "../../ui/LinkButton";
 
-type EmptyCartProps = {
-  children?: React.ReactNode;
-};
-
-const EmptyCart: React.FC<EmptyCartProps> = () => {
+const EmptyCart = () => {
   return (
     <div className="px-4 py-6">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>

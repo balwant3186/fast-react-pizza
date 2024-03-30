@@ -13,7 +13,7 @@ export type MenuItemProps = {
 };
 
 const MenuItem: React.FC<MenuItemProps> = ({ pizza }) => {
-  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  const { id, name, unitPrice, ingredients, soldOut } = pizza;
 
   const dispatch = useDispatch();
 

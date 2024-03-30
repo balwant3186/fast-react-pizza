@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SearchOrder = () => {
@@ -6,7 +6,7 @@ const SearchOrder = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (!query) return;
 

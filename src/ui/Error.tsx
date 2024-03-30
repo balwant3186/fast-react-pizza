@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useRouteError } from "react-router-dom";
+import { useRouteError } from "react-router-dom";
 import LinkButton from "./LinkButton";
 
 type ErrorProps = {
@@ -14,8 +14,6 @@ interface ErrorRes {
 }
 
 const Error: React.FC<ErrorProps> = () => {
-  const navigate = useNavigate();
-
   const error = useRouteError() as ErrorRes;
 
   return (

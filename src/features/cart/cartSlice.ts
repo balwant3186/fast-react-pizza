@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Cart } from "./Cart";
+import { StoreState } from "../../store";
 
-type CartType = {
+export type CartType = {
   cart: Cart[];
 };
 
@@ -55,19 +56,19 @@ export const {
 
 export default cartSlice.reducer;
 
-export const getTotalPrice = (state) => {
+export const getTotalPrice = (state: StoreState) => {
   return state.cart.cart.reduce((acc, curr) => acc + curr.totalPrice, 0);
 };
 
-export const getTotalQuantity = (state) => {
+export const getTotalQuantity = (state: StoreState) => {
   return state.cart.cart.reduce((acc, curr) => acc + curr.quantity, 0);
 };
 
-export const getCart = (state) => {
+export const getCart = (state: StoreState) => {
   return state.cart.cart;
 };
 
-export const getCurrentQuantityById = (id: number) => (state) => {
+export const getCurrentQuantityById = (id: number) => (state: StoreState) => {
   return (
     state.cart.cart.find((item: Cart) => item.pizzaId === id)?.quantity ?? 0
   );
