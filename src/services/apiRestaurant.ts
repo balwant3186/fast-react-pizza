@@ -21,7 +21,6 @@ export async function getOrder(id: string) {
 }
 
 export async function createOrder(newOrder: Partial<Order>) {
-  console.log("🚀 ~ createOrder ~ newOrder:", newOrder);
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: "POST",
